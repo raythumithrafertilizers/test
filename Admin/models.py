@@ -17,7 +17,7 @@ class CompanyBills(models.Model):
 	company_tin_number = models.CharField(max_length=300, default="")
 	bill_image = models.FileField(upload_to='static/static/uploads/')
 	invoice_date = models.DateField(datetime.now().date())
-	uploaded_at = models.DateTimeField(default=datetime.now())
+	uploaded_at = models.DateTimeField(auto_now_add=True)
 
 class StockDetails(models.Model):
 
@@ -55,7 +55,7 @@ class StockDetails(models.Model):
 
 class CustomerPayments(models.Model):
 	paid_amount = models.FloatField(default=0.0)
-	paid_date = models.DateField(default=datetime.now().date())
+	paid_date = models.DateField(auto_now_add=True)
 
 class Customers(models.Model):
 
@@ -65,7 +65,7 @@ class Customers(models.Model):
 	phone = models.CharField(max_length=30)
 	address = models.TextField()
 	customer_payments = models.ManyToManyField(CustomerPayments)
-	create_date = models.DateTimeField(default= datetime.now())
+	create_date = models.DateTimeField(auto_now_add=True)
 
 class ProductsList(models.Model):
 	product = models.ForeignKey(StockDetails,on_delete=models.CASCADE)
@@ -82,7 +82,7 @@ class Billing(models.Model):
 	total_paid = models.FloatField(null=True)
 	due = models.FloatField(null=True)
 	total_quantity = models.FloatField(null=True)
-	bill_date = models.DateTimeField(default= datetime.now())
+	bill_date = models.DateTimeField(auto_now_add=True)
 	description = models.TextField()
 	month = models.CharField( max_length=100, default=calendar.month_name[int(datetime.now().month)])
 

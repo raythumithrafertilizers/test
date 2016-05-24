@@ -21,26 +21,32 @@
         <div class="col-md-12" id="printing_space">
           <!-- general form elements -->
           <div class="box box-danger box-top-border">
-            <div class="box-body box-body-print">
+            <div>
               <!-- start print bill start -->
               <div class="row">
-                <div class="col-lg-3 col-md-3 col-xs-3 text-left">
-                  <h5>TIN No : 36292158448</h5>
-                  <h5>PL No : 20/2015</h5>
-                  <h5>SL No : RRD/21/JDA/2015/3714</h5>
-                  <h5>FL No : RRD/21/ADA/2015/16502</h5>
+                <div class="col-lg-4 col-md-4 col-xs-4 text-left">
+                  <h5 style="font-size: 89%;">TIN No : 36292158448</h5>
+                  <h5 style="font-size: 89%;">PL No : 20/2015</h5>
+                  <h5 style="font-size: 89%;">SL No : RRD/21/JDA/2015/3714</h5>
+                  <p style="font-size: 89%;">FL No : RRD/21/ADA/2015/16502</p>
                 </div>
-                <div class="col-lg-6 col-md-6 col-xs-6 text-center print-heading">
+                <div class="col-lg-4 col-md-4 col-xs-4 text-center">
                   <h5><b>subject to vikarabad jurisdiction</b></h5>
                   <p class="btn btn-bill">[[ bill_type_display ]] BILL</p>
+                </div>
+                <div class="col-lg-4 col-md-4 col-xs-4 text-right">
+                  <h5>Cell : 9705163311</h5>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-lg-12 col-md-12 col-xs-12 text-center print-heading">
+
                   <h3><b>RAYTHU MITHRA FERTILIZERS</b></h3>
                   <h4>PESTICIDES & SEEDS</h4>
                   <h5>Shop No. 4-326, Vill, Thoramamidi, Mdl, Bantwaram, R.R. Dist. - 501142.</h5>
                   <h4><b>రైతు మిత్ర ఫర్టిలైజర్స్  </b> - <span>తొరమామిడి </span></h4>
                 </div>
-                <div class="col-lg-3 col-md-4 col-xs-3 text-right">
-                  <h5>Cell : 9705163311</h5>
-                </div>
+
               </div>
 
               <div class="row">
@@ -65,12 +71,12 @@
                   <table class="table table-bordered table-responsive-own table-pad">
                 <tbody>
                 <tr>
-                  <th class="text-center" style="width:50px">S No.</th>
+                  <th class="text-center" style="width:50px">SN</th>
                   <th class="text-center" style="width:250px">
                     <p>PARTICULARS.</p>
                   </th>
                   <!--<th class="text-center" style="width:50px">Stock Type.</th>-->
-                  <th class="text-center">Expired Date.</th>
+                  <!--<th class="text-center">Exp Date</th>-->
                   <th class="text-center" style="width:150px">Bt/Lot.No.</th>
                   <th class="text-center">Qty.</th>
                   <th class="text-center">Rate.</th>
@@ -82,7 +88,7 @@
                   <td><input type="text" value="[[ $index+1 ]]" class="enter-text" /></td>
                   <td><input type="text" value="[[ product.product_name ]]" ng-model="product.product_name" class="enter-text" /></p></td>
                   <!--<td><input type="text" value="[[ product.product_type ]]" ng-model="product.product_type" class="enter-text" /></td>-->
-                  <td><input type="text" value="[[ product.expired_date ]]" ng-model="product.expired_date" class="enter-text" /></td>
+                  <!--<td><input type="text" value="[[ product.expired_date ]]" ng-model="product.expired_date" class="enter-text" /></td>-->
                   <td><input type="text" value="[[ product.bt_no ]]" ng-model="product.bt_no" class="enter-text" /></td>
                   <td><input type="text" value="[[ product.total_quantity ]]" ng-model="product.total_quantity" class="enter-text" /></td>
                   <td><input type="text" value="[[ product.single_price ]]" ng-model="product.single_price" class="enter-text" /></td>
@@ -92,13 +98,13 @@
                   <td></td>
                   <td></td>
                   <!--<td></td>-->
-                  <td></td>
+                  <!--<td></td>-->
                   <td></td>
                   <td></td>
                 </tr>
                 <tr class="table-space">
                   <td></td>
-                  <td></td>
+                  <!--<td></td>-->
                   <!--<td></td>-->
                   <td></td>
                   <td></td>
@@ -108,7 +114,7 @@
                   <td></td>
                   <td></td>
                   <!--<td></td>-->
-                  <td></td>
+                  <!--<td></td>-->
                   <td></td>
                   <td></td>
                 </tr>
@@ -117,7 +123,35 @@
                   <td>
                     <p><center><b style="font-size:15px;">Total</b>(including vat)</center></p>
                   </td>
+                  <!--<td></td>-->
+                  <!--<td></td>-->
                   <td></td>
+                  <td><b style="font-size:15px;">
+                    <input type="text" value="[[ bill_info.total_quantity ]]" ng-model="bill_info.total_quantity" class="enter-text" /></b></td>
+                  <td></td>
+                  <td><b style="font-size:15px;">
+                    <input type="text" value="[[ bill_info.total_price ]]" ng-model="bill_info.total_price" class="enter-text" /></b></td>
+                </tr>
+                <tr style="border-top: 1px solid #ddd;border-bottom: 1px solid #ddd;">
+                  <td><input type="text" class="enter-text" /></td>
+                  <td>
+                    <p><center><b style="font-size:15px;">Total</b>(including vat)</center></p>
+                  </td>
+                  <!--<td></td>-->
+                  <!--<td></td>-->
+                  <td></td>
+                  <td><b style="font-size:15px;">
+                    <input type="text" value="[[ bill_info.total_quantity ]]" ng-model="bill_info.total_quantity" class="enter-text" /></b></td>
+                  <td></td>
+                  <td><b style="font-size:15px;">
+                    <input type="text" value="[[ bill_info.total_price ]]" ng-model="bill_info.total_price" class="enter-text" /></b></td>
+                </tr>
+                <tr style="border-top: 1px solid #ddd;border-bottom: 1px solid #ddd;">
+                  <td><input type="text" class="enter-text" /></td>
+                  <td>
+                    <p><center><b style="font-size:15px;">Total</b>(including vat)</center></p>
+                  </td>
+                  <!--<td></td>-->
                   <!--<td></td>-->
                   <td></td>
                   <td><b style="font-size:15px;">
