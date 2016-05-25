@@ -325,6 +325,7 @@ $scope.load =
                         }
 
                         $scope.bill_info['bill_date'] = new Date()
+                        $scope.bill_info['paid'] = $scope.bill_info['total_price'] - $scope.bill_info['due']
                         console.log(response, '============')
             }, function errorCallback(response)
             {

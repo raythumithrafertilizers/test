@@ -71,41 +71,33 @@
                   <table class="table table-bordered table-responsive-own table-pad">
                 <tbody>
                 <tr>
-                  <th class="text-center" style="width:50px">SN</th>
-                  <th class="text-center" style="width:250px">
+                  <th class="text-center" style="width: 3%;">SN</th>
+                  <th class="text-center" style="width:20%">
                     <p>PARTICULARS.</p>
                   </th>
                   <!--<th class="text-center" style="width:50px">Stock Type.</th>-->
-                  <!--<th class="text-center">Exp Date</th>-->
-                  <th class="text-center" style="width:150px">Bt/Lot.No.</th>
-                  <th class="text-center">Qty.</th>
-                  <th class="text-center">Rate.</th>
-                  <th class="text-center">Rs.</th>
+                  <th class="text-center" style="width:18%">Exp Date</th>
+                  <th class="text-center" style="width: 15%">Bt/Lot.No.</th>
+                  <th class="text-center" style="width: 7%">Qty</th>
+                  <th class="text-center" style="width: 20%">Rate.</th>
+                  <th class="text-center" style="width: 20%">Rs.</th>
 
                 </tr>
 
                 <tr ng-repeat="product in bill_info.p_details" class="table-td">
                   <td><input type="text" value="[[ $index+1 ]]" class="enter-text" /></td>
-                  <td><input type="text" value="[[ product.product_name ]]" ng-model="product.product_name" class="enter-text" /></p></td>
+                  <td><textarea style="resize:none"  class="enter-text">[[ product.product_name ]]</textarea></td>
                   <!--<td><input type="text" value="[[ product.product_type ]]" ng-model="product.product_type" class="enter-text" /></td>-->
-                  <!--<td><input type="text" value="[[ product.expired_date ]]" ng-model="product.expired_date" class="enter-text" /></td>-->
-                  <td><input type="text" value="[[ product.bt_no ]]" ng-model="product.bt_no" class="enter-text" /></td>
-                  <td><input type="text" value="[[ product.total_quantity ]]" ng-model="product.total_quantity" class="enter-text" /></td>
-                  <td><input type="text" value="[[ product.single_price ]]" ng-model="product.single_price" class="enter-text" /></td>
-                  <td><input type="text" value="[[ product.total_price ]]" ng-model="product.total_price"  class="enter-text" /></td>
+                  <td><input type="text" value="[[ product.expired_date ]]" ng-model="product.expired_date" class="enter-text" /></td>
+                  <td><textarea style="resize:none"  class="enter-text">[[ product.bt_no ]]</textarea></td>
+                  <td><input type="text" value="[[ product.total_quantity ]]"  class="enter-text" /></td>
+                  <td><input type="text"  value="[[ product.single_price ]]"  class="enter-text" /></td>
+                  <td><input type="text" value="[[ product.total_price ]]"  class="enter-text" /></td>
                 </tr>
                 <tr class="table-space-first">
                   <td></td>
                   <td></td>
                   <!--<td></td>-->
-                  <!--<td></td>-->
-                  <td></td>
-                  <td></td>
-                </tr>
-                <tr class="table-space">
-                  <td></td>
-                  <!--<td></td>-->
-                  <!--<td></td>-->
                   <td></td>
                   <td></td>
                   <td></td>
@@ -114,17 +106,25 @@
                   <td></td>
                   <td></td>
                   <!--<td></td>-->
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                </tr>
+                <tr class="table-space">
+                  <td></td>
+                  <td></td>
                   <!--<td></td>-->
+                  <td></td>
                   <td></td>
                   <td></td>
                 </tr>
                 <tr style="border-top: 1px solid #ddd;border-bottom: 1px solid #ddd;">
                   <td><input type="text" class="enter-text" /></td>
                   <td>
-                    <p><center><b style="font-size:15px;">Total</b>(including vat)</center></p>
+                    <p><center><b style="font-size:15px;">Total</b></center></p>
                   </td>
                   <!--<td></td>-->
-                  <!--<td></td>-->
+                  <td><p style="font-size:15px;"><center>including vat</center></p></td>
                   <td></td>
                   <td><b style="font-size:15px;">
                     <input type="text" value="[[ bill_info.total_quantity ]]" ng-model="bill_info.total_quantity" class="enter-text" /></b></td>
@@ -135,30 +135,30 @@
                 <tr style="border-top: 1px solid #ddd;border-bottom: 1px solid #ddd;">
                   <td><input type="text" class="enter-text" /></td>
                   <td>
-                    <p><center><b style="font-size:15px;">Total</b>(including vat)</center></p>
+                    <p><center><b style="font-size:15px;">Paid</b></center></p>
                   </td>
-                  <!--<td></td>-->
+                  <td></td>
                   <!--<td></td>-->
                   <td></td>
                   <td><b style="font-size:15px;">
-                    <input type="text" value="[[ bill_info.total_quantity ]]" ng-model="bill_info.total_quantity" class="enter-text" /></b></td>
+                    <!--<input type="text" value="[[ bill_info.total_quantity ]]" ng-model="bill_info.total_quantity" class="enter-text" /></b></td>-->
                   <td></td>
                   <td><b style="font-size:15px;">
-                    <input type="text" value="[[ bill_info.total_price ]]" ng-model="bill_info.total_price" class="enter-text" /></b></td>
+                    <input type="text" value="[[ bill_info.paid ]]" class="enter-text" /></b></td>
                 </tr>
                 <tr style="border-top: 1px solid #ddd;border-bottom: 1px solid #ddd;">
                   <td><input type="text" class="enter-text" /></td>
                   <td>
-                    <p><center><b style="font-size:15px;">Total</b>(including vat)</center></p>
+                    <p><center><b style="font-size:15px;">Final Total</b></center></p>
                   </td>
-                  <!--<td></td>-->
+                  <td></td>
                   <!--<td></td>-->
                   <td></td>
                   <td><b style="font-size:15px;">
-                    <input type="text" value="[[ bill_info.total_quantity ]]" ng-model="bill_info.total_quantity" class="enter-text" /></b></td>
+                    <!--<input type="text" value="[[ bill_info.total_quantity ]]" ng-model="bill_info.total_quantity" class="enter-text" /></b></td>-->
                   <td></td>
                   <td><b style="font-size:15px;">
-                    <input type="text" value="[[ bill_info.total_price ]]" ng-model="bill_info.total_price" class="enter-text" /></b></td>
+                    <input type="text" value="[[ bill_info.due ]]" class="enter-text" /></b></td>
                 </tr>
 
               </tbody></table>
