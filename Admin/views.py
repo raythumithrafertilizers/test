@@ -18,7 +18,7 @@ item_types = ["Seeds", "Pesticides", "Fertilizers", "Bio_Pesticides", "Bio_Ferti
 class SpecificCustomerPayments(APIView):
     """docstring for ClassName"""
 
-    @method_decorator(admin_login_required)
+    #@method_decorator(admin_login_required)
     def post(self, request):
         try:
             body = request.body.decode("utf-8")
@@ -33,6 +33,8 @@ class SpecificCustomerPayments(APIView):
                 print body
                 customer_payment = CustomerPayments.objects.get(id=body['id'])
                 customer_payment.paid_amount = body['paid_amount']
+                if 'user_id' in request.session:
+                    customer_payment.added_by = request.session['user_id']
                 customer_payment.save()
                 return Response({"response": "successfully saved ... "}, status=200)
 
@@ -53,6 +55,8 @@ class AddPayment(APIView):
             body = json.loads(body)
 
             customer_payment = CustomerPayments(paid_amount=body['paid_amount'])
+            if 'user_id' in request.session:
+                customer_payment.added_by = request.session['user_id']
             customer_payment.save()
 
             customer = Customers.objects.get(id = body['customer_id'])
@@ -458,6 +462,9 @@ class EditStock(APIView):
 
             stock = StockDetails.objects.get(id = str(body['stockdata']['stockId']))
 
+            if 'user_id' in request.session:
+                stock.added_by = request.session['user_id']
+
             expired_converted_date = datetime.datetime.strptime(str(body['stockdata']['expired_date']),"%d/%m/%Y").date()
 
             stock.item_name = body['stockdata']['stock_name']
@@ -563,6 +570,10 @@ class EditCustomer(APIView):
             body = json.loads(body_unicode)
             user = Customers.objects.get(id = str(body['user_id']))
             print body, '------------'
+
+            if 'user_id' in request.session:
+                user.added_by = request.session['user_id']
+
             if 'first_name' in body:
                 user.first_name = body['first_name']
                 print 'first name'
@@ -671,6 +682,9 @@ class AddCustomer(View):
                 user.last_name = body['lastname']
             if 'address' in body:
                 user.address = body['address']
+            if 'user_id' in request.session:
+                user.added_by = request.session['user_id']
+
             user.save()
             return json_response({"response":"success"}, status=200)
 
@@ -741,6 +755,8 @@ class BillManagement(View):
                 # save billing information
                 customer = Customers.objects.get(id = body['bill_details']['customerId'])
                 data = Billing.objects.get(id = body['bill_details']['bill_id'])
+                if 'user_id' in request.session:
+                    data.added_by = request.session['user_id']
                 data.customer = customer
                 data.total_price = float(body['bill_details']['price'])
                 data.total_quantity= float(body['bill_details']['quantity'])
@@ -769,6 +785,8 @@ class BillManagement(View):
                 specific_stock.save()
 
             billingObject = Billing(due = body['due'])
+            if 'user_id' in request.session:
+                billingObject.added_by = request.session['user_id']
             billingObject.total_paid = body['amount_paid']
             billingObject.total_quantity = body['total_quantity']
             billingObject.total_price = body['total_price']
@@ -910,6 +928,8 @@ class CompanyBillsManagement(View):
                     companyBill.company_invoice_number = data['company_invoice']
                     companyBill.invoice_date = data['invoice_date']
                     companyBill.company_tin_number = data['tin_number']
+                    if 'user_id' in request.session:
+                        companyBill.added_by = request.session['user_id']
 
                     if file_name:
                         print 'yes pic'
@@ -920,6 +940,8 @@ class CompanyBillsManagement(View):
                     companyBill = CompanyBills(company_name = data['company_name'])
                     companyBill.company_invoice_number = data['company_invoice']
                     companyBill.company_tin_number = data['tin_number']
+                    if 'user_id' in request.session:
+                        companyBill.added_by = request.session['user_id']
                     temp_invoice_date = datetime.datetime.strptime(str(data['invoice_date']),
                                                                         "%d/%m/%Y").date()
                     companyBill.invoice_date = temp_invoice_date
@@ -976,6 +998,9 @@ class AddStock(View):
             stock = StockDetails(item_name = body['stockdata']['stock_name'],
                                  item_type= body['stockdata']['stock_type']['name'],
                                  expire_date = expired_converted_date)
+
+            if 'user_id' in request.session:
+                stock.added_by = request.session['user_id']
 
             if 'invoice_bill' in body['stockdata']:
                 try:

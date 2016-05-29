@@ -19,6 +19,7 @@ class CompanyBills(models.Model):
 	invoice_date = models.DateField(datetime.now().date())
 	uploaded_at = models.DateTimeField(auto_now_add=True)
 	is_deleted = models.BooleanField(default=False)
+	added_by = models.IntegerField(default=0)
 
 class StockDetails(models.Model):
 
@@ -55,10 +56,12 @@ class StockDetails(models.Model):
 	seen = models.BooleanField(default=False)
 
 	is_deleted = models.BooleanField(default=False)
+	added_by = models.IntegerField(default=0)
 
 class CustomerPayments(models.Model):
 	paid_amount = models.FloatField(default=0.0)
 	paid_date = models.DateField(auto_now_add=True)
+	added_by = models.IntegerField(default=0)
 
 class Customers(models.Model):
 
@@ -69,6 +72,7 @@ class Customers(models.Model):
 	address = models.TextField()
 	customer_payments = models.ManyToManyField(CustomerPayments)
 	create_date = models.DateTimeField(auto_now_add=True)
+	added_by = models.IntegerField(default=0)
 
 class ProductsList(models.Model):
 	product = models.ForeignKey(StockDetails,on_delete=models.CASCADE)
@@ -88,6 +92,7 @@ class Billing(models.Model):
 	bill_date = models.DateTimeField(auto_now_add=True)
 	description = models.TextField()
 	month = models.CharField( max_length=100, default=calendar.month_name[int(datetime.now().month)])
+	added_by = models.IntegerField(default=0)
 
 
 
