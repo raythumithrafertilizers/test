@@ -7,7 +7,7 @@ urlpatterns = patterns('Admin.views',
 
     url(r'^edit-user', EditUsers.as_view()),
     url(r'^delete-rythu-user', DeleteUser.as_view()),
-    url(r'^add-users', AddUser.as_view()),
+    #url(r'^add-users', AddUser.as_view()),
     url(r'^userlist', GetUsersData.as_view()),
     url(r'^userdata', UserData.as_view()),
     url(r'^add-stock', AddStock.as_view()),
