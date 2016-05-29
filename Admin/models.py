@@ -18,6 +18,7 @@ class CompanyBills(models.Model):
 	bill_image = models.FileField(upload_to='static/static/uploads/')
 	invoice_date = models.DateField(datetime.now().date())
 	uploaded_at = models.DateTimeField(auto_now_add=True)
+	is_deleted = models.BooleanField(default=False)
 
 class StockDetails(models.Model):
 
@@ -52,6 +53,8 @@ class StockDetails(models.Model):
 	isLegal = models.CharField(max_length=100, default='legal')
 	month = models.CharField( max_length=100, default=calendar.month_name[int(datetime.now().month)])
 	seen = models.BooleanField(default=False)
+
+	is_deleted = models.BooleanField(default=False)
 
 class CustomerPayments(models.Model):
 	paid_amount = models.FloatField(default=0.0)

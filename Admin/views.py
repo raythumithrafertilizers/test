@@ -419,7 +419,7 @@ class GetStock(APIView):
 
     def get(self, request):
         try:
-            stocklist = StockDetails.objects.all()
+            stocklist = StockDetails.objects.filter(is_deleted=False)
             stockslist = serializers.serialize('json', stocklist)
             main_data = json.loads(stockslist)
 
@@ -600,7 +600,8 @@ class DeleteStock(APIView):
             body = json.loads(body_unicode)
             print body,'============='
             stockdata = StockDetails.objects.get(id = str(body['stockId']))
-            stockdata.delete()
+            stockdata.is_deleted = True
+            stockdata.save()
             return json_response({"status" : "successfully deleted"}, status=200)
         except Exception as e:
             print e
@@ -633,9 +634,19 @@ class DeleteCustomer(APIView):
         try:
             body_unicode = request.body.decode('utf-8')
             body = json.loads(body_unicode)
-            print body,'============='
             userdata = Customers.objects.get(id = str(body['user_id']))
+
+            # delete customer payments
+            userdata.customer_payments.all().delete()
+
+            #delete billings of customer
+            Billing.objects.filter(customer = userdata).delete()
+
+            # delete customer
             userdata.delete()
+
+
+            #userdata.delete()
             return json_response({"status" : "successfully deleted"}, status=200)
         except Exception as e:
             print e
@@ -861,8 +872,8 @@ def deleteCompanyBill(request):
         body_unicode = request.body.decode('utf-8')
         body = json.loads(body_unicode)
         bill = CompanyBills.objects.get(id = str(body['bill_id']))
-        os.remove(BASE_DIR+'/'+str(bill.bill_image))
-        bill.delete()
+        bill.is_deleted = True
+        bill.save()
         return json_response({"status" : "successfully deleted"}, status=200)
 
     except Exception as e:
@@ -875,7 +886,7 @@ class CompanyBillsManagement(View):
 
     def get(self, request):
         try:
-            company_bills1 = CompanyBills.objects.all()
+            company_bills1 = CompanyBills.objects.filter(is_deleted = False)
             company_bills = serializers.serialize('json', company_bills1)
             return json_response({"bills_list": company_bills}, status=200)
         except Exception as e:
@@ -1200,7 +1211,7 @@ class GraphData(View):
             elif 'low_quantity_avaible_products' in body:
 
                 try:
-                    stocks = StockDetails.objects.all().order_by('available_stock').values_list('item_name','available_stock')
+                    stocks = StockDetails.objects.filter(is_deleted=False).order_by('available_stock').values_list('item_name','available_stock')
                     dummy_data = []
                     for temp in stocks:
                         obj = {}
@@ -1326,7 +1337,7 @@ class GraphData(View):
 
             elif 'expired_expiring_products' in body:
 
-                stocks = StockDetails.objects.all()
+                stocks = StockDetails.objects.filter(is_deleted=False)
                 dummy_data = []
                 current = datetime.datetime.now().date()
                 print 'current is', current
