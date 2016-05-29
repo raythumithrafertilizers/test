@@ -954,41 +954,7 @@ class CompanyBillsManagement(View):
         except Exception as e:
             json_response({"err" : "User already exists with this email id"}, status=401)
 
-class AddUser(View):
-	"""User Registration"""
 
-	def get(self, request):
-		return HttpResponse("method not allowed")
-
-	def post(self, request):
-		body_unicode = request.body.decode('utf-8')
-		body = json.loads(body_unicode)
-		try:
-			user = User.objects.get(email = str(body['email']))
-			return json_response({"err" : "User already exists with this email id"}, status=401)
-		except Exception, e:
-			user = User.objects.create_user(str(body['email']), str(body['email']), str(body['password']))
-			user.first_name = body['firstname']
-			user.last_name = body['lastname']
-			userobj = UserDetails()
-			userobj.userKey = user
-			userobj.phone =  str(body['phone'])
-			act_code = random_key(16)
-			userobj.activationCode =  str(act_code)
-			userobj.role = "subadmin"
-			userobj.save()
-			user.save()
-
-			"""content = Context({"firstname": str(body['firstname']), "lastname" : str(body['lastname']) ,"email": str(body['email']), "activationcode": act_code})
-			pwdtemplate = get_template('registeremail.html')
-			htmlt = pwdtemplate.render(content)
-			to = [str(body['email'])]
-			by = "no-reply@basemodule.me"
-			subject = "Account Activation"
-			msg = EmailMultiAlternatives(subject, "", by, to)
-			msg.attach_alternative(htmlt, "text/html")
-			msg.send()"""
-			return json_response({"response":"success"}, status=200)
 
 
 
