@@ -12,6 +12,8 @@ angular.module("App")
 
      $scope.uploadPic = function(file) {
 
+        if(file != undefined){
+
             file.upload = Upload.upload({
               url: '/superuser/company-bill',
               data: {
@@ -36,6 +38,39 @@ angular.module("App")
               // Math.min is to fix IE which reports 200% sometimes
               file.progress = Math.min(100, parseInt(100.0 * evt.loaded / evt.total));
             });
+
+        }else{
+
+            console.log($scope.company.company_name, $scope.company.invoice_number,$scope.company.invoice_date,$scope.company.tin_number)
+            var data1 = {
+                    'company_name': $scope.company.company_name,
+                    'company_invoice': $scope.company.invoice_number,
+                    'invoice_date': $scope.company.invoice_date,
+                    'tin_number': $scope.company.tin_number
+                }
+
+            $scope.load = $http({
+                  method: 'post',
+                  url: '/superuser/company-bill',
+                  data : data1,
+                  headers: {'Content-Type': 'application/x-www-form-urlencoded'}
+             }).then(function (response){
+                console.log('after created invoice bill', response)
+                toastr.success('successfully created...')
+                $location.path('/company-bills')
+
+
+
+             }, function(error){
+                console.log(error)
+             })
+
+
+
+
+        }
+
+
 
      }
 
@@ -158,8 +193,8 @@ angular.module("App")
     }
 
 	$scope.load = $http({
-	  		method: 'GET',
-			  url: '/superuser/company-bill',
+	  		    method: 'GET',
+			    url: '/superuser/company-bill',
 			}).then(function (response){
 		    		$scope.billsList = [];
 		    		console.log(response, '0000000')

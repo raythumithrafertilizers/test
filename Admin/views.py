@@ -4,7 +4,7 @@ from rest_framework.views import APIView
 from BaseApp.views import *
 from django.db.models import Q
 import datetime
-from django.db.models import Sum, Count
+from django.db.models import Sum, Count, F
 from BaseModule.settings import *
 import os
 import json, csv
@@ -271,17 +271,21 @@ class InvoiceReports(APIView):
             for invoice_bill in invoice_bills:
 
                 obj ={}
-                stock_details_temp = StockDetails.objects.filter(invoice_bill = invoice_bill).values('item_type').annotate(total_price = Sum("quantity_weight") * Sum("item_cost"))
+                # group by categroy type and total_price = weight* total
+                stock_details_temp = StockDetails.objects.filter(invoice_bill = invoice_bill).values('item_type').annotate(total_price = Sum(F("quantity_weight") * F("item_cost")))
+                print stock_details_temp, '+++++original'
 
                 # if items types are more repeat and replace space with _
                 for temp in stock_details_temp:
                     obj[temp['item_type'].replace (" ", "_")] = temp['total_price']
 
-                obj['invoice_number'] =  invoice_bill.company_invoice_number
+                obj['invoice_number'] = invoice_bill.company_invoice_number
                 obj['invoice_date'] = str(invoice_bill.invoice_date)
                 obj['company_name'] = str(invoice_bill.company_name)
                 obj['company_tin_number'] = str(invoice_bill.company_tin_number)
                 final_data.append(obj)
+
+            print final_data, '***************'
 
             for key in item_types:
                 for object in final_data:
@@ -920,6 +924,8 @@ class CompanyBillsManagement(View):
                 for filename, file in request.FILES.iteritems():
                     file_name = request.FILES[filename]
 
+
+
                 data = json.loads(json.dumps(request.POST))
                 if 'bill_id' in request.POST:
                     print 'yes update'
@@ -937,22 +943,51 @@ class CompanyBillsManagement(View):
                     companyBill.save()
                     return json_response({"response" : "data updated successfully"}, status=200)
                 else:
-                    companyBill = CompanyBills(company_name = data['company_name'])
-                    companyBill.company_invoice_number = data['company_invoice']
-                    companyBill.company_tin_number = data['tin_number']
-                    if 'user_id' in request.session:
-                        companyBill.added_by = request.session['user_id']
-                    temp_invoice_date = datetime.datetime.strptime(str(data['invoice_date']),
-                                                                        "%d/%m/%Y").date()
-                    companyBill.invoice_date = temp_invoice_date
-                    companyBill.bill_image = file_name
-                    companyBill.save()
+                    # if file is selected
+                    if file_name:
+
+                        companyBill = CompanyBills(company_name = data['company_name'])
+                        companyBill.company_invoice_number = data['company_invoice']
+
+                        if 'tin_number' in data:
+                            companyBill.company_tin_number = data['tin_number']
+                        if 'user_id' in request.session:
+                            companyBill.added_by = request.session['user_id']
+
+                        if 'invoice_date' in data:
+                            temp_invoice_date = datetime.datetime.strptime(str(data['invoice_date']),
+                                                                            "%d/%m/%Y").date()
+                            companyBill.invoice_date = temp_invoice_date
+                        if file_name:
+                            companyBill.bill_image = file_name
+                        companyBill.save()
+                    # is file is not selected
+                    else:
+                        body_unicode = request.body.decode('utf-8')
+                        body = json.loads(body_unicode)
+                        data = body
+
+                        companyBill = CompanyBills(company_name=data['company_name'])
+                        companyBill.company_invoice_number = data['company_invoice']
+
+                        if 'tin_number' in data:
+                            companyBill.company_tin_number = data['tin_number']
+                        if 'user_id' in request.session:
+                            companyBill.added_by = request.session['user_id']
+
+                        if 'invoice_date' in data:
+                            temp_invoice_date = datetime.datetime.strptime(str(data['invoice_date']),
+                                                                           "%d/%m/%Y").date()
+                            companyBill.invoice_date = temp_invoice_date
+
+                        companyBill.save()
+
                     return json_response({"response" : "data saved successfully"}, status=200)
             except Exception as e:
                 print e
-                return json_response({"error" : "unable to process data"}, status=200)
+                return json_response({"error" : "unable to process data"}, status=405)
         except Exception as e:
-            json_response({"err" : "User already exists with this email id"}, status=401)
+            json_response({"err" : "User already exists with this email id"}, status=405)
 
     def put(self, request):
         try:
@@ -1217,7 +1252,7 @@ class GraphData(View):
             elif 'counts_number' in body:
 
                 try:
-                    total_sold_quantity = StockDetails.objects.all().aggregate(total_quantiy=Sum('quantity_weight') - Sum('available_stock'))['total_quantiy']
+                    total_sold_quantity = StockDetails.objects.all().aggregate(total_quantiy=Sum(F('quantity_weight') - F('available_stock')))['total_quantiy']
 
                     paid_due = Billing.objects.all().aggregate(total_paid=Sum('total_paid'), due =  Sum('due'))
 
